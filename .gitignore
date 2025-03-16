@@ -2,7 +2,7 @@ WebApp.py
 Scrapper/testprim.py
 Scrapper/testprim2.ipynb
 
-Agents/
+Agents/test.py
 
 # Python 
 __pycache__/
@@ -32,3 +32,6 @@ var/
 # 虚拟环境
 venv/
 ENV/
+
+# 环境变量
+.env
