@@ -6,7 +6,5 @@ from typing import List, Dict
 class GraphState(BaseModel):
     user_query: str
     user_query_history: List[str]
-    llm_transcribe_user_query: str
-    teams_data: Dict[str, pd.DataFrame]
     response: str
 
