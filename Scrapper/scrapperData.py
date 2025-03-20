@@ -3,7 +3,7 @@ from fake_useragent import UserAgent
 class Data:
     ScrappedUrl = "https://fbref.com/en/comps/9/Premier-League-Stats"
     targetTable = "table.stats_table"
-    filePath = r"C:\Users\Haemon\Desktop\DataScience\Project\Europe Football betting agent\main"
+    filePath = r"Teams/"
 
     @staticmethod
     def get_headers():

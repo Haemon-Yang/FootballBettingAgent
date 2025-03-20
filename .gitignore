@@ -4,6 +4,7 @@ Scrapper/testprim2.ipynb
 pandasai.log
 Agents/llm_structuredOutput_example.py
 exports/
+test/
 
 # Python 
 __pycache__/
