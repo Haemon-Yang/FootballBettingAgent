@@ -1,8 +1,9 @@
 WebApp.py
 Scrapper/testprim.py
 Scrapper/testprim2.ipynb
-
+pandasai.log
 Agents/llm_structuredOutput_example.py
+exports/
 
 # Python 
 __pycache__/
