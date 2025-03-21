@@ -10,8 +10,14 @@ class Workflow():
         nodes = Nodes(llm)
 
         workflow.add_node("Understand User Query", nodes.determine_userQuery)
+        workflow.add_node("Strategist", nodes.strategist)
+
         workflow.add_edge(START, "Understand User Query")
-        workflow.add_edge("Understand User Query", END)
+        
+        # Future: Add conditional edge (if query do not need strategist, then answer it directly)
+        workflow.add_edge("Understand User Query", "Strategist")
+        
+        workflow.add_edge("Strategist", END)
 
         self.app = workflow.compile()
 
@@ -19,6 +25,6 @@ class Workflow():
         return {
         "user_query": "",
         "user_query_history": [],
-        "llm_transcribe_user_query": "",
+        "list_of_teams": [],
         "response": ""
     }

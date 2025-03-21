@@ -6,5 +6,5 @@ from typing import List, Dict
 class GraphState(BaseModel):
     user_query: str
     user_query_history: List[str]
+    list_of_teams: List[str]
     response: str
-

@@ -4,9 +4,7 @@ import pandas as pd
 import numpy as np
 import requests
 import time
-#from .scrapperData import Data
-from scrapperData import Data
-import csv
+from .scrapperData import Data
 import os
 from io import StringIO
 
@@ -58,15 +56,15 @@ class PremierLeagueCrawler:
          # Dictionary mapping DataFrames to worksheet names
          sheet_names = {
             0: "Matches",
-            1: "StandardStats",
-            2: "ShootingStats",
-            3: "PassingStats", 
-            4: "PassTypes",
-            5: "GoalShotCreation",
-            6: "DefensiveActions",
+            1: "Standard Stats",
+            2: "Shooting Stats",
+            3: "Passing Stats", 
+            4: "Pass Types",
+            5: "Goal & Shot Creation",
+            6: "Defensive Actions",
             7: "Possession",
-            8: "PlayingTime",
-            9: "MiscStats"
+            8: "Playing Time",
+            9: "Miscellaneous Stats"
          }
          
          if save_as_excel:
@@ -115,7 +113,8 @@ class PremierLeagueCrawler:
       except Exception as e:
          print(f"Error in getTeamsUrl: {e}")
 
-   def loadTeamsInfo(self, filePath: str) -> dict:
+   @staticmethod
+   def loadTeamsInfo(filePath: str) -> dict:
       """
       Loads the teams info from the file.
       
