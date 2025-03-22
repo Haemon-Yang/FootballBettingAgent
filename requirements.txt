@@ -1,0 +1,12 @@
+beautifulsoup4
+python-dotenv
+langchain
+langchain_community
+langchain-openai
+langgraph
+json5
+python-docx
+md2pdf
+boto3
+awscli
+streamlit

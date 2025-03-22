@@ -1,0 +1,39 @@
+WebApp.py
+Scrapper/testprim.py
+Scrapper/testprim2.ipynb
+pandasai.log
+Agents/llm_structuredOutput_example.py
+exports/
+test/
+
+# Python 
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# 虚拟环境
+venv/
+ENV/
+
+# 环境变量
+.env
