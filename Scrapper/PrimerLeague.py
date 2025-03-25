@@ -38,6 +38,34 @@ class PremierLeagueCrawler:
 
       except Exception as e:
          print(f"Error in scrap: {e}")
+
+   def preprocess_data(self, data_list: list[pd.DataFrame]) -> list[pd.DataFrame]:
+      cleaned_data_list = []
+      for df in data_list:
+         cols_to_keep = []
+         for col in df[0].columns:
+            if type(col) == str:
+               if col == "Notes" or col == "Match Report" or col == "Referee":
+                  df[0].drop(col, axis=1, inplace=True)
+            elif type(col) == tuple:
+               multi_index = tuple()
+               if "Matches" in col or "Nation" in col:
+                  df[0].drop(col, axis=1, inplace=True)
+               else:
+                  for col_name in col:                    
+                     # Unnamed 則替換保留
+                     if "Unnamed" in col_name:
+                        multi_index += ("",)
+                     else:
+                        multi_index += (col_name,)
+                  cols_to_keep.append(multi_index)
+
+         if cols_to_keep == []:
+            cleaned_data_list.append(df[0])
+         else:
+            df[0].columns = pd.MultiIndex.from_tuples(new_col_name for new_col_name in cols_to_keep)
+            cleaned_data_list.append(df[0])
+      return cleaned_data_list
    
    def save_data(self, data_list: list[pd.DataFrame], team_name: str, output_dir: str = "data", save_as_excel: bool = True) -> None:
       """

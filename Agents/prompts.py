@@ -88,7 +88,7 @@ def create_team_data_report(teamName: str, teamData: List[dict]) -> str:
         for worksheetName, dataframeInStr in team.items():
             teamDataStr += f"Data - {worksheetName}:\n\n {dataframeInStr}\n\n"
             teamDataStr += "-----------------------------------\n\n"
-    teamDataStr += f"{teamName} Data End"
+    #teamDataStr += f"{teamName} Data End\n"
     teamDataStr += "===================================\n\n"
     
     return teamDataStr
