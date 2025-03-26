@@ -167,6 +167,11 @@ class PremierLeagueCrawler:
       except Exception as e:
         print(f"Error loading CSV file: {e}")
         return pd.DataFrame()
-      
+
+   @staticmethod
+   def load_md_as_str(filePath: str) -> str:
+      with open(filePath, encoding="utf-8") as file:
+         content = file.read()
+      return content
    # ToDo: 1. async scrapping 2. store into database (local & cloud) 3. Load Data
    # Additional: 1. logging monitoring
