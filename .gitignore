@@ -1,3 +1,4 @@
+# Self-test files
 WebApp.py
 Scrapper/testprim.py
 Scrapper/testprim2.ipynb
@@ -5,6 +6,11 @@ pandasai.log
 Agents/llm_structuredOutput_example.py
 exports/
 test/
+RAG_cursor_example.py
+rag_test_results.json
+RAG_implementation.py
+RAG_Embedding_test.py
+test_rag.py
 
 # Python 
 __pycache__/

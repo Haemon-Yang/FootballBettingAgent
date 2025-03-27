@@ -7,6 +7,9 @@ import time
 from .scrapperData import Data
 import os
 from io import StringIO
+from langchain_openai import ChatOpenAI
+from typing import List, Dict
+from Agents.prompts import format_df_as_str_dict, create_team_data_report_md
 
 class PremierLeagueCrawler:
    data = requests.get(Data.ScrappedUrl, headers = Data.get_headers())
@@ -173,5 +176,46 @@ class PremierLeagueCrawler:
       with open(filePath, encoding="utf-8") as file:
          content = file.read()
       return content
+   
+   @staticmethod
+   def _private_process_teamData_to_prompt(filePath: str, team_name: str) -> List[str]:
+      """
+      Process team data to prompt.
+      For LLM to generate formatted output from table data.
+
+      Args:
+         team_data (Dict[str, pd.DataFrame]): Dictionary of DataFrames with team name as key
+
+      Returns:
+         List[str]: List of prompts
+      """
+      team_data = PremierLeagueCrawler.loadTeamsInfo(filePath)
+      prompt = []
+      
+      for worksheet_name, df in team_data.items():
+         tmp_str = []
+         tmp_str.append(format_df_as_str_dict(worksheet_name, df))
+         tmp_prompt = Data.prompt.format(table_content = create_team_data_report_md(
+            team_name, tmp_str))
+         prompt.append(tmp_prompt)
+      return prompt
+
+   @staticmethod
+   def transform_xlsx_to_md(data_to_transform: List[str], team_name: str):
+      """
+      Transform team data to md.
+      """
+      llm = ChatOpenAI(model="gpt-4o-mini")
+
+      content = ""
+      for worksheet in data_to_transform:
+         llm_output = llm.invoke(input=worksheet)
+         content += llm_output.content
+         content += "\n\n"
+         time.sleep(5)
+      
+      with open(f'{team_name}_all_stats.md', 'w', encoding='utf-8') as file:
+         file.write(content)
+
    # ToDo: 1. async scrapping 2. store into database (local & cloud) 3. Load Data
    # Additional: 1. logging monitoring
