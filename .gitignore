@@ -1,17 +1,9 @@
 # Self-test files
-WebApp.py
-Scrapper/testprim.py
-Scrapper/testprim2.ipynb
-pandasai.log
-Agents/llm_structuredOutput_example.py
-main_flowTest.py
 exports/
 test/
-RAG_cursor_example.py
-rag_test_results.json
-RAG_implementation.py
-RAG_Embedding_test.py
-test_rag.py
+
+# Vs code
+.vscode/
 
 # Python 
 __pycache__/
@@ -38,9 +30,9 @@ var/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# 虚拟环境
+# virtual environment
 venv/
 ENV/
 
-# 环境变量
+# environment variables
 .env
