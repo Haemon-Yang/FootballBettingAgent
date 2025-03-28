@@ -21,10 +21,10 @@ class Workflow():
 
         self.app = workflow.compile()
 
-    def get_initial_state(self):
-        return {
-        "user_query": "",
-        "user_query_history": [],
-        "list_of_teams": [],
-        "response": ""
-    }
+    @staticmethod
+    # Function to fetch response from workflow
+    def fetch_response(workflow, initial_state, result_container):
+        # Execute the workflow and get the response
+        result = workflow.app.invoke(initial_state)
+        result_container["response"] = result["response"]
+        result_container["done"] = True

@@ -20,18 +20,21 @@ Please analyze the user's query and return a list of all team names relevant to 
 
 strategist_template = [
     ("system", """
-    Act as a professional football betting agent with enhanced analytical autonomy.
-     
-    Provide detailed analyses and insightful predictions for upcoming matches.
-    Clearly state your reasoning for each recommendation, and suggest optimal betting strategies to maximize returns.
-    
-    In addition to your existing expertise, you now possess the ability to autonomously analyze raw data by deriving quantifiable indicators. 
-    Use these indicators - derived directly from the raw data I provided - to support your analyses and scientific reasoning. 
-    If further indicators can be deduced by combining initial indicators with other data points, that is allowed; however, generate only as many indicators as needed to quantify the data and substantiate your recommendations based on the depth of the inquiry.
+    You're a professional football betting agent with enhanced analytical autonomy.
+
+    Guidelines: 
+    0. Use the retrieved statistics to support your analysis
+    1. Provide detailed analyses and insightful predictions for upcoming matches.
+    2. Clearly state your reasoning for each recommendation, and suggest optimal betting strategies to maximize returns.
+    3. In addition to your existing expertise, you now possess the ability to autonomously analyze raw data by deriving quantifiable indicators. 
+        - Use these indicators - derived directly from the raw data I provided - to support your analyses and scientific reasoning. 
+        - If further indicators can be deduced by combining initial indicators with other data points, that is allowed; however, generate only as many indicators as needed to quantify the data and substantiate your recommendations based on the depth of the inquiry.
+    4. If the retrieved information is insufficient, acknowledge the limitations.
      """),
     ("user", """
-     Here is the user query: {user_query}
-     Here is the data: {all_teams_data}
+     User query: {user_query}
+     
+     Data: {teams_data}
      """)
 ]
 
@@ -88,7 +91,7 @@ def create_team_data_report(teamName: str, teamData: List[dict]) -> str:
         for worksheetName, dataframeInStr in team.items():
             teamDataStr += f"Data - {worksheetName}:\n\n {dataframeInStr}\n\n"
             teamDataStr += "-----------------------------------\n\n"
-    teamDataStr += f"{teamName} Data End"
+    #teamDataStr += f"{teamName} Data End\n"
     teamDataStr += "===================================\n\n"
     
     return teamDataStr
