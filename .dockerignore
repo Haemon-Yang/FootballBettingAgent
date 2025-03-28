@@ -1,0 +1,60 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+.env
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+
+# Database files
+*.db
+*.sqlite
+
+# Chromedriver
+chromedriver
+
+# Docker-specific
+.dockerignore
+Dockerfile
+
+# Chroma database (will be recreated)
+chroma_db/
+
+# Logs
+*.log
+
+# Testing
+.pytest_cache/
+.coverage
+
+# Misc
+.DS_Store 
