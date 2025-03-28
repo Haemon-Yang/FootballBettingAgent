@@ -58,6 +58,66 @@ This project aims to increase the winning rate in a soccer betting game. We util
 
 ### 💻 Run Locally
 
+To run the Soccer Betting Agent locally on your machine, follow these steps:
+
+1. **Prerequisites**:
+   - Python 3.9+ installed
+   - Git installed
+   - OpenAI API key and other required API keys
+
+2. **Clone the repository**:
+
+   ```bash
+   git clone [repository-url]
+   cd [repository-directory]
+   ```
+
+3. **Set up a virtual environment** (optional but recommended):
+
+   ```bash
+   # On Windows
+   python -m venv venv
+   venv\Scripts\activate
+
+   # On macOS/Linux
+
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+4. **Install dependencies**:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. **Configure environment variables**:
+
+   ```bash
+   cp .env_example .env
+   # Edit the .env file and add your API keys:
+   # OPENAI_API_KEY=your_openai_api_key
+   # LANGCHAIN_API_KEY=your_langchain_api_key
+   # TAVILY_API_KEY=your_tavily_api_key
+   # HUGGINGFACE_API_KEY=your_huggingface_api_key
+   ```
+
+6. **Run the application**:
+
+   ```bash
+   streamlit run frontend.py
+   ```
+
+7. **Access the application**:
+
+   Open your browser and navigate to:
+
+   ```
+   http://localhost:8501
+   ```
+
+The application will load the necessary models and start scraping data on first run. You can then interact with the betting agent through the chat interface.
+
 ## 🤝 Contributing
 
 Feel free to submit pull request or open an issue for any suggestion or improvements.
