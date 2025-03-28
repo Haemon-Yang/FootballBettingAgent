@@ -34,7 +34,7 @@ strategist_template = [
     ("user", """
      User query: {user_query}
      
-     Data: {all_teams_data}
+     Data: {teams_data}
      """)
 ]
 

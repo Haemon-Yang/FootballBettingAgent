@@ -3,7 +3,7 @@ from fake_useragent import UserAgent
 class Data:
     ScrappedUrl = "https://fbref.com/en/comps/9/Premier-League-Stats"
     targetTable = "table.stats_table"
-    filePath = r"Teams/"
+    team_data_savePath = r"Teams/"
 
     @staticmethod
     def get_headers():
@@ -24,7 +24,7 @@ class Data:
         }
     
     # Turn into markdown format & add description (Use LLM)
-    prompt = """
+    team_data_2md_prompt = """
     Given that the following table is a dataframe in string format,
     provide a detailed description of the table. 
     Then, include the table in markdown format while preserving every single row, column and cell exactly as provided. 
@@ -40,3 +40,17 @@ class Data:
         1. A comprehensive description of the table.
         2. The table in markdown format.
     """
+
+    # Dictionary mapping DataFrames to worksheet names
+    sheet_names = {
+        -1: "Matches",
+        0: "Standard Stats",
+        1: "Shooting Stats",
+        2: "Passing Stats", 
+        3: "Pass Types",
+        4: "Goal & Shot Creation",
+        5: "Defensive Actions",
+        6: "Possession",
+        7: "Playing Time",
+        8: "Miscellaneous Stats"
+    }

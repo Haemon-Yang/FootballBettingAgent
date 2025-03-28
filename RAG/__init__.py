@@ -1,2 +1,2 @@
 from .RAG_app import RAG_application
-import Data
+from .Data import *

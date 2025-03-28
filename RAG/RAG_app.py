@@ -3,22 +3,18 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_core.documents import Document
 from typing import List
-from Scrapper.PrimerLeague import PremierLeagueCrawler
-import Data
+from . import Data
 
 class RAG_application:
     def __init__(self):
         self.embedding_model = HuggingFaceEmbeddings(model_name=Data.embedding_model)
         self.persist_directory = Data.persist_directory
+        self.db_collection_name = Data.db_collection_name_premier_league
 
-        pass
-
-    def split_documents(self,filePath: str) -> List[Document]:
+    def split_documents(self, team_data: str) -> List[Document]:
         """
         Split documents into chunks.
         """
-        team_data = PremierLeagueCrawler.load_md_as_str(filePath)
-
         headers_to_split_on = [
             ("###", "header_1"),
             ("##", "header_2"),
@@ -36,20 +32,31 @@ class RAG_application:
         docs = text_splitter.split_documents(md_header_splits)
         return docs
     
-    def create_vector_store(self, docs: List[Document], collection_name: str) -> Chroma:
+    def create_vector_db(self):
         """
         Create vector store for RAG.
         """
+        db = Chroma(
+            collection_name=self.db_collection_name,
+            embedding_function=self.embedding_model,
+            persist_directory=self.persist_directory
+        )
+
+    def update_vector_store(self, docs: List[Document], ids: List[str]):
+        """
+        Update vector store for RAG.
+        """
         try:
-            db = Chroma.from_documents(
+            db = Chroma(
+                collection_name=self.db_collection_name,
+                embedding_function=self.embedding_model,
+                persist_directory=self.persist_directory
+            )
+            
+            db.update_documents(
                 documents=docs,
-                embedding=self.embedding_model,
-                persist_directory=self.persist_directory,
-                collection_name=collection_name
+                ids=ids
             )
             db.persist()
         except Exception as e:
-            print(f"Error creating vector store: {e}")
-            return None
-    
-    
+            print(f"Error creating vector store: {e}") 

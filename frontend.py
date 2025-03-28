@@ -1,18 +1,10 @@
 import streamlit as st
 import time
 from graph import Workflow
-from langchain_openai import ChatOpenAI  # Assuming you're using OpenAI
-#from langchain_aws import ChatBedrock
-#import boto3
+from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 import threading
-
-# Function to fetch response from workflow
-def fetch_response(workflow, initial_state, result_container):
-    # Execute the workflow and get the response
-    result = workflow.app.invoke(initial_state)
-    result_container["response"] = result["response"]
-    result_container["done"] = True
+from init import get_initial_graph_state, system_init, setup_scheduled_updates
 
 # This file is for the frontend application
 st.title("Main Title - Betting Agent")
@@ -24,7 +16,13 @@ if "workflow" not in st.session_state:
     load_dotenv()
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)  # Adjust based on your actual LLM setup
     st.session_state.workflow = Workflow(llm)
-    
+
+# System Initialization
+if "is_initialized" not in st.session_state:
+    system_init(llm)
+    setup_scheduled_updates(**st.session_state)
+    st.session_state.is_initialized = True
+
 if st.button("Close!"):
     st.write("Closing...")
     st.stop()
@@ -49,7 +47,7 @@ if prompt := st.chat_input("Type your question..."):
     
     # Process the query using workflow
     # Create initial state with user query
-    initial_state = st.session_state.workflow.get_initial_state()
+    initial_state = get_initial_graph_state()
     initial_state["user_query"] = prompt
     
     # Create a placeholder for the AI response
@@ -61,7 +59,7 @@ if prompt := st.chat_input("Type your question..."):
         
         # Start the background thread with the external function
         thread = threading.Thread(
-            target=fetch_response,
+            target=Workflow.fetch_response,
             args=(st.session_state.workflow, initial_state, result_container)
         )
         thread.start()
