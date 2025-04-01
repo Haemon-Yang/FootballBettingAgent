@@ -17,7 +17,8 @@ class Strategist():
         
         prompt = ChatPromptTemplate.from_messages(strategist_template)
         parser = StrOutputParser()
-        chain = ({"teams_data": vector_store.as_retriever(),"user_query": RunnablePassthrough()}
+        chain = ({"teams_data": vector_store.as_retriever(k=RAG_data.retrieval_k), 
+                  "user_query": RunnablePassthrough()}
             | RunnableLambda(debug_retrieval)
             | prompt
             | llm
