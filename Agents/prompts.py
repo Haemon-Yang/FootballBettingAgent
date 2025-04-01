@@ -8,11 +8,8 @@ Extract and list the user's main requirements or goals.
 Identify any constraints, conditions, or specifications mentioned explicitly or implicitly by the user.
 Summarize the user's overall intent clearly and concisely.
 Suggest clarifying questions if any ambiguity or uncertainty remains.
-
-Note:
-Based on the user's query, identify the team names that might need to be analyzed. All team names must be selected from {list_of_teams}. 
-Please analyze the user's query and return a list of all team names relevant to the query. If the user doesn't explicitly mention any teams, but the query implies certain teams, please identify those teams as well.
-    
+Ensure the query can retrieves accurate and complete information from the RAG system. Some content may be split across chunks, so try to reconstruct or retrieve the full context where possible.
+         
 {format_instructions}
      """),
     ("user", "Analyze the following user query: {user_query}")

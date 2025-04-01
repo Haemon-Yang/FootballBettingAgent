@@ -39,7 +39,7 @@ def update_PremierLeague_data(llm: ChatOpenAI):
         #    crawler.save_data(team_data, team_name, output_dir=scrapperData.team_data_savePath, 
         #                      save_as_excel=True)
 
-        # process data to prompt and save md file
+        # process data to prompt and save md file (took too long time for single team)
         for team_name in crawler.teamsInfo.keys():
             team_stats_prompt = crawler.process_teamData_to_prompt(f"{scrapperData.team_data_savePath}{team_name}_stats.xlsx", team_name)
             team_stats_md = crawler.transform_xlsx_to_md(team_stats_prompt, llm)
@@ -54,23 +54,18 @@ def create_RAG_vector_db():
     Rag_app = RAG_application()
     Rag_app.create_vector_db()
 
-def update_RAG_vector_db():
+def add_doc_to_RAG_vector_db():
     """
     Update the RAG vector store.
     """
     Rag_app = RAG_application()
     crawler = PremierLeagueCrawler()
     crawler.getTeamsUrl()
-    start_idx = 0
-    end_idx = 0
     for team_name in PremierLeagueCrawler.teamsInfo.keys():
         team_data = PremierLeagueCrawler.load_md_as_str(
             f"{scrapperData.team_data_savePath}{team_name}_all_stats.md")
         docs = Rag_app.split_documents(team_data)
-        end_idx = start_idx + len(docs)
-        ids = [str(id) for id in range(start_idx, end_idx)]
-        Rag_app.update_vector_store(docs, ids)
-        start_idx = end_idx
+        Rag_app.add_doc_to_vector_db(docs)
 
 def check_RAG_vector_db_exist() -> bool:
     """

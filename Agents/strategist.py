@@ -17,7 +17,7 @@ class Strategist():
         
         prompt = ChatPromptTemplate.from_messages(strategist_template)
         parser = StrOutputParser()
-        chain = ({"teams_data": vector_store.as_retriever(), "user_query": RunnablePassthrough()}
+        chain = ({"teams_data": vector_store.as_retriever(),"user_query": RunnablePassthrough()}
             | RunnableLambda(debug_retrieval)
             | prompt
             | llm
@@ -30,7 +30,7 @@ def debug_retrieval(inputs):
     print(f"Retrieved {len(docs)} documents:")
     for i, doc in enumerate(docs):
         print(f"Document {i+1}:")
-        print(f"Content: {doc.page_content[:100]}...")  # Print first 100 chars
+        print(f"Content: {doc.page_content}...")  # Print first 100 chars
         print(f"Metadata: {doc.metadata}")
         print("-" * 50)
     return inputs

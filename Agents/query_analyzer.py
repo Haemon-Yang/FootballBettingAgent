@@ -8,7 +8,7 @@ class QueryAnalyzer():
     def __init__(self, llm) -> None:        
         UserPrompt = ChatPromptTemplate.from_messages(DetermineUserQuery_template)
         parser = PydanticOutputParser(pydantic_object=GraphState)
-        chain = ({"user_query": RunnablePassthrough(), "list_of_teams": RunnablePassthrough()}
+        chain = ({"user_query": RunnablePassthrough()}
                  | UserPrompt.partial(format_instructions=parser.get_format_instructions()) 
                  | llm 
                  | parser)
