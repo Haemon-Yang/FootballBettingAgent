@@ -1,5 +1,7 @@
 # ⚽ Soccer Betting Agent
 
+![Cover](Doc/Cover.png)
+
 ## 📝 Description
 
 This project aims to increase the winning rate in a soccer betting game. We utilize agent to analyze team stats and provide solid suggestion on a betting game.
@@ -34,7 +36,14 @@ This project aims to increase the winning rate in a soccer betting game. We util
 3. Create a `.env` file with the required API keys:
 
    ```bash
+   # On macOS/Linux
    cp .env_example .env
+   
+   # On Windows
+   copy .env_example .env
+   # OR using PowerShell
+   Copy-Item .env_example .env
+   
    # Edit .env and add your API keys
    ```
 
@@ -94,7 +103,14 @@ To run the Soccer Betting Agent locally on your machine, follow these steps:
 5. **Configure environment variables**:
 
    ```bash
+   # On macOS/Linux
    cp .env_example .env
+   
+   # On Windows
+   copy .env_example .env
+   # OR using PowerShell
+   Copy-Item .env_example .env
+   
    # Edit the .env file and add your API keys:
    # OPENAI_API_KEY=your_openai_api_key
    # LANGCHAIN_API_KEY=your_langchain_api_key

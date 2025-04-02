@@ -12,13 +12,13 @@ class Nodes():
         updated_query_history = state.user_query_history.copy()
         updated_query_history.append(user_query)
         result = self.agent.query_analyzer.chain.invoke(
-            {"user_query": user_query, "list_of_teams": list_of_teams})
+            {"user_query": user_query})
 
         return {
             "user_query_history": updated_query_history,
             "user_query": result.user_query,
-            "list_of_teams": result.list_of_teams,
-            "response": result.response
+            "response": result.response,
+            "is_strategist_needed": result.is_strategist_needed
         }
 
     def strategist(self, state):
@@ -28,6 +28,15 @@ class Nodes():
         return {
             "response": result
         }
+
+    def route_based_to_strategist(self, state):
+        """
+        Understand if the user query needs a strategist
+        """
+        if state.is_strategist_needed == True:
+            return "YES"
+        else:
+            return "NO"
 
     def update_PremierLeague_data(self, state):
         """

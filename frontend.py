@@ -16,11 +16,12 @@ if "workflow" not in st.session_state:
     load_dotenv()
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)  # Adjust based on your actual LLM setup
     st.session_state.workflow = Workflow(llm)
+    st.session_state.LLM = llm
 
 # System Initialization
 if "is_initialized" not in st.session_state:
-    system_init(llm)
-    setup_scheduled_updates(**st.session_state)
+    # system_init(llm)
+    # setup_scheduled_updates(**st.session_state)
     st.session_state.is_initialized = True
 
 if st.button("Close!"):

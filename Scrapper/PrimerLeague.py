@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-import json
+import random
 import pandas as pd
 import numpy as np
 import requests
@@ -206,7 +206,7 @@ class PremierLeagueCrawler:
          llm_output = llm.invoke(input=worksheet)
          content += llm_output.content
          content += "\n\n"
-         time.sleep(6)
+         time.sleep(random.uniform(6, 15))
       return content
    
    @staticmethod
