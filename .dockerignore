@@ -27,7 +27,6 @@ var/
 # Virtual Environment
 venv/
 ENV/
-.env
 
 # Editor directories and files
 .idea
@@ -47,7 +46,7 @@ chromedriver
 Dockerfile
 
 # Chroma database (will be recreated)
-chroma_db/
+# chroma_db/
 
 # Logs
 *.log
