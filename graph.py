@@ -15,7 +15,15 @@ class Workflow():
         workflow.add_edge(START, "Understand User Query")
         
         # Future: Add conditional edge (if query do not need strategist, then answer it directly)
-        workflow.add_edge("Understand User Query", "Strategist")
+        workflow.add_conditional_edges(
+            "Understand User Query",
+            nodes.route_based_to_strategist,
+            {
+                "YES": "Strategist",
+                "NO": END
+            }
+        )
+        #workflow.add_edge("Understand User Query", "Strategist")
         
         workflow.add_edge("Strategist", END)
 
