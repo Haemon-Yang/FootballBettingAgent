@@ -43,26 +43,43 @@ This project aims to increase the winning rate in a soccer betting game. We util
    copy .env_example .env
    # OR using PowerShell
    Copy-Item .env_example .env
+   ```
+
+4. Edit .env and add your API keys
    
-   # Edit .env and add your API keys
+   ```bash
+   # Edit the .env file and add your API keys:
+   OPENAI_API_KEY=your_openai_api_key
+   LANGCHAIN_API_KEY=your_langchain_api_key
+   TAVILY_API_KEY=your_tavily_api_key
+   HUGGINGFACE_API_KEY=your_huggingface_api_key
    ```
 
-4. Build and run the Docker container:
+5. Build the Docker image:
 
    ```bash
-   docker-compose up -d
+   docker build --no-cache -t soccer-betting-agent .
    ```
 
-5. Access the application in your browser:
-
-   ```
-   http://localhost:8501
-   ```
-
-6. To stop the container:
+6. Run the Docker image by container
 
    ```bash
-   docker-compose down
+   docker run --name your_container_name -d -p HOST_IP:HOST_PORT:8501 soccer-betting-agent
+   ```
+
+   ```bash
+   #Example
+   docker run --name container_called_aaa -d -p 0.0.0.0:1000:8501 soccer-betting-agent
+   ```
+
+   You can set up your HOST_PORT based on your personal preference.
+   
+   Note: You need to specify the host ip.
+
+7. Access the application in your browser:
+
+   ```
+   http://localhost:HOST_PORT
    ```
 
 ### 💻 Run Locally
@@ -112,10 +129,10 @@ To run the Soccer Betting Agent locally on your machine, follow these steps:
    Copy-Item .env_example .env
    
    # Edit the .env file and add your API keys:
-   # OPENAI_API_KEY=your_openai_api_key
-   # LANGCHAIN_API_KEY=your_langchain_api_key
-   # TAVILY_API_KEY=your_tavily_api_key
-   # HUGGINGFACE_API_KEY=your_huggingface_api_key
+   OPENAI_API_KEY=your_openai_api_key
+   LANGCHAIN_API_KEY=your_langchain_api_key
+   TAVILY_API_KEY=your_tavily_api_key
+   HUGGINGFACE_API_KEY=your_huggingface_api_key
    ```
 
 6. **Run the application**:
