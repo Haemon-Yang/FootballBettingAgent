@@ -6,10 +6,56 @@ from dotenv import load_dotenv
 import threading
 from init import get_initial_graph_state, system_init, setup_scheduled_updates
 
-# This file is for the frontend application
-st.title("Main Title - Betting Agent")
-st.header("Helps you win the bets")
-st.subheader("Tell me about the match and I will help you win the bet")
+# Set page configuration
+st.set_page_config(
+    page_title="Smart Betting Assistant",
+    page_icon="🎯",
+    layout="wide"
+)
+
+# Custom CSS for better styling
+st.markdown("""
+    <style>
+    .main-header {
+        color: #1E88E5;
+        font-family: 'Helvetica Neue', sans-serif;
+    }
+    .sub-header {
+        color: #424242;
+        font-family: 'Helvetica Neue', sans-serif;
+    }
+    .stButton>button {
+        background-color: #1E88E5;
+        color: white;
+        border-radius: 10px;
+        padding: 10px 25px;
+        font-weight: bold;
+    }
+    .stTextInput>div>div>input {
+        border-radius: 10px;
+    }
+    .chat-message {
+        padding: 15px;
+        border-radius: 10px;
+        margin: 5px 0;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Main layout with columns
+col1, col2, col3 = st.columns([1, 2, 1])
+
+with col2:
+    # Title section with enhanced styling
+    st.markdown("<h1 class='main-header'>🎯 Smart Betting Assistant</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 class='sub-header'>Your AI-Powered Betting Strategy Partner</h3>", unsafe_allow_html=True)
+    
+    # Add a subtle divider
+    st.markdown("---")
+
+    # Information container
+    with st.container():
+        st.info("💡 Tell me about the match and I'll help you make informed betting decisions.")
 
 # Initialize LLM and Workflow once (only on first run)
 if "workflow" not in st.session_state:
@@ -52,7 +98,7 @@ if prompt := st.chat_input("Type your question..."):
     initial_state["user_query"] = prompt
     
     # Create a placeholder for the AI response
-    with st.chat_message("ai"):
+    with st.chat_message("ai", avatar="🤖"):
         message_placeholder = st.empty()
         
         # Start API call in a separate thread to not block the UI
