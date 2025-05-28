@@ -1,4 +1,4 @@
-# ⚽ Soccer Betting Agent
+# ⚽ Football Betting Agent
 
 ![Cover](Doc/Cover.png)
 
