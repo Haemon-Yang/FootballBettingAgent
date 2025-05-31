@@ -136,12 +136,12 @@ def get_initial_graph_state():
     Get the initial state for the graph state.
     """
     return {
+    # Main Workflow
     "user_query": "",
     "user_query_history": [],
     "response": "",
     "llm_transcript": "",
-
-    # Flags
-    "is_strategist_needed": False
+    
+    "adapter_route": "",
 }
 

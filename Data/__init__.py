@@ -1,0 +1,1 @@
+from .deep_research_param import NUMBER_OF_QUERIES, NUMBER_OF_RESULTS

@@ -1,5 +1,5 @@
-from .state import GraphState
-from .prompts import strategist_template
+from GraphState.main_state import MainGraphState
+from Prompt import strategist_template
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda

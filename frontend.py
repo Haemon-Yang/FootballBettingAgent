@@ -3,8 +3,19 @@ import time
 from graph import Workflow
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
+from typing import Dict
+import asyncio
 import threading
 from init import get_initial_graph_state, system_init, setup_scheduled_updates
+
+async def process_query(workflow: Workflow, initial_state: dict, result_container: dict):
+    await Workflow.fetch_response(workflow, initial_state, result_container)
+
+def run_async_task_in_thread(workflow, initial_state, result_container):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(process_query(workflow, initial_state, result_container))
+
 
 # Set page configuration
 st.set_page_config(
@@ -104,13 +115,11 @@ if prompt := st.chat_input("Type your question..."):
         # Start API call in a separate thread to not block the UI
         result_container = {"response": None, "done": False}
         
-        # Start the background thread with the external function
-        thread = threading.Thread(
-            target=Workflow.fetch_response,
-            args=(st.session_state.workflow, initial_state, result_container)
-        )
+        # In your Streamlit code:
+        result_container = {"response": None, "done": False}
+        thread = threading.Thread(target=run_async_task_in_thread, args=(st.session_state.workflow, initial_state, result_container))
         thread.start()
-        
+
         # Show animated thinking indicator while waiting for response
         thinking_dots = [".", "..", "..."]
         dot_index = 0
@@ -122,9 +131,10 @@ if prompt := st.chat_input("Type your question..."):
             time.sleep(0.3)
         
         # Get the response once it's ready
-        response = result_container["response"]
-        
-        # Process markdown response with typing effect
+        response = result_container["response"]        
+
+        # Process markdown response with typing effect - 2
+        # ===============================================
         if st.session_state.get("enable_typing_effect", True):
             # Split by paragraphs to better preserve markdown structure
             paragraphs = response.split('\n')
@@ -139,9 +149,11 @@ if prompt := st.chat_input("Type your question..."):
                 # Update display with markdown formatting
                 message_placeholder.markdown(current_text)
                 time.sleep(0.1)
+            
+            message_placeholder.markdown(response)
         else:
             # Just display the full response with markdown
             message_placeholder.markdown(response)
-    
+            
     # Add AI response to chat history
     st.session_state.messages.append({"role": "ai", "content": response})

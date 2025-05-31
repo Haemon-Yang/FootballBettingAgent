@@ -4,19 +4,29 @@
 
 ## 📝 Description
 
-This project aims to increase the winning rate in a soccer betting game. We utilize agent to analyze team stats and provide solid suggestion on a betting game.
+This project aims to increase the winning rate in football betting games in the Premier League. We utilize AI agents to analyze team statistics and provide solid suggestions for betting decisions.
 
 ## ✨ Features
 
-- **🤖 AI-Powered Analysis**: Leverages AI agents to provide intelligent betting recommendations
-- **💬 Interactive Chat Interface**: User-friendly frontend
+- **🤖 AI-Powered Analysis**: Leverages advanced AI agents to provide intelligent betting recommendations
+- **💬 Interactive Chat Interface**: User-friendly frontend with natural language interaction
+- **🔍 Deep Research Capability**: Powered by a research system which can make a comprehensive investigation in specific topic
 - **📊 Premier League Data Scraping**: Automatically collects and processes real-time statistics
 - **📈 Comprehensive Match Analysis**: Evaluates team performance, historical data, and current form
 - **🎯 Personalized Betting Advice**: Tailored recommendations based on user preferences and risk tolerance
+- **🔄 Real-time Updates**: Continuous data refresh to ensure the most current information
 
 ## 🏗️ Architecture
 
+The system consists of several key components:
+
+1. **Data Collection Layer**: Scrapes and processes Premier League data
+2. **AI Analysis Engine**: Processes data and generates insights
+3. **User Interface**: Interactive chat-based interface
+
 ![Architecture of System](Doc/Europe%20Football%20workflow-v2.drawio.png)
+
+![Architecture of Agent workflow](Doc/workflow_graph.png)
 
 ## 🚀 Getting Started
 
@@ -29,8 +39,8 @@ This project aims to increase the winning rate in a soccer betting game. We util
 2. Clone the repository:
 
    ```bash
-   git clone [repository-url]
-   cd [repository-directory]
+   git clone https://github.com/Haemon-Yang/football-betting-agent.git
+   cd football-betting-agent
    ```
 
 3. Create a `.env` file with the required API keys:
@@ -94,8 +104,8 @@ To run the Soccer Betting Agent locally on your machine, follow these steps:
 2. **Clone the repository**:
 
    ```bash
-   git clone [repository-url]
-   cd [repository-directory]
+   git clone https://github.com/Haemon-Yang/football-betting-agent.git
+   cd football-betting-agent
    ```
 
 3. **Set up a virtual environment** (optional but recommended):
@@ -106,7 +116,6 @@ To run the Soccer Betting Agent locally on your machine, follow these steps:
    venv\Scripts\activate
 
    # On macOS/Linux
-
    python3 -m venv venv
    source venv/bin/activate
    ```
@@ -157,4 +166,8 @@ Feel free to submit pull request or open an issue for any suggestion or improvem
 
 ## 📄 License
 
-This project is licensed under the MIT license.
+This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+For support, please open an issue in the GitHub repository or contact the maintainers.

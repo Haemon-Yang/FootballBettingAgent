@@ -9,7 +9,7 @@ import os
 from io import StringIO
 from langchain_openai import ChatOpenAI
 from typing import List, Dict
-from Agents.prompts import format_df_as_str_dict, create_team_data_report
+from .helpers import format_df_as_str_dict, create_team_data_report
 
 class PremierLeagueCrawler:
    data = requests.get(Data.ScrappedUrl, headers = Data.get_headers())
