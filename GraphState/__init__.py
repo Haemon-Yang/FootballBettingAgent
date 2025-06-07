@@ -22,6 +22,8 @@ if TYPE_CHECKING:
         ReportStateOutput
     )
 
+from .strategist_state import StrategistState
+
 # Main state imports
 from .main_state import MainGraphState
 

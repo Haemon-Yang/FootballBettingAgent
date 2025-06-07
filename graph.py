@@ -3,6 +3,7 @@ from GraphState.main_state import MainGraphState
 from node import Nodes
 from GraphState.deep_research_state import ReportState, ReportStateInput, ReportStateOutput
 from GraphState.deep_research_state import SectionState, SectionOutputState
+from GraphState.strategist_state import StrategistState
 from langchain_openai import ChatOpenAI
 import os
 # Agent 中的最上層 用來連接所有Node
@@ -43,13 +44,30 @@ class Workflow():
         deep_research_workflow.add_edge("compile_final_report", END)
         
         deep_research_agent = deep_research_workflow.compile()
+        #==========================
+        strategist_workflow = StateGraph(StrategistState)
+        strategist_workflow.add_node("Retrieve Documents", nodes.retrieve_doc_for_strategist)
+        strategist_workflow.add_node("Generate Analysis Report", nodes.strategist)
+        strategist_workflow.add_node("Rewrite Query for Strategist", nodes.rewrite_query_for_strategist)
+
+        strategist_workflow.add_edge(START, "Retrieve Documents")
+        strategist_workflow.add_conditional_edges("Retrieve Documents", nodes.route_to_strategist,
+                                                  {
+                                                      "Generate Analysis Report": "Generate Analysis Report",
+                                                      "Rewrite Query for Strategist": "Rewrite Query for Strategist"
+                                                  })
+        strategist_workflow.add_edge("Rewrite Query for Strategist", "Retrieve Documents")
+        strategist_workflow.add_edge("Generate Analysis Report", END)
+
+        strategist_agent = strategist_workflow.compile()
+        self.strategist_agent = strategist_agent
 
         #==========================
 
         # Main Workflow
         workflow = StateGraph(MainGraphState)
         workflow.add_node("Understand User Query", nodes.determine_userQuery)
-        workflow.add_node("Strategist", nodes.strategist)
+        workflow.add_node("Strategist", strategist_agent)
         workflow.add_node("Deep Research", deep_research_agent)
 
         workflow.add_edge(START, "Understand User Query")
@@ -91,10 +109,19 @@ def visualize_workflow():
     output_dir = "Doc/"
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    with open(os.path.join(output_dir, "workflow_graph.png"), "wb") as f:
-        f.write(graph_image)
+    #with open(os.path.join(output_dir, "workflow_graph.png"), "wb") as f:
+        #f.write(graph_image)
     
-    print("Graph has been saved as 'Docs/workflow_graph.png'")
+    #print("Graph has been saved as 'Docs/workflow_graph.png'")
+    
+    graph2 = workflow.strategist_agent.get_graph()
+    graph_image2 = graph2.draw_mermaid_png()
+    if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+    with open(os.path.join(output_dir, "strategist_graph.png"), "wb") as f:
+        f.write(graph_image2)
+    
+    #print("Graph has been saved as 'Docs/workflow_graph.png'") 
 
 if __name__ == "__main__":
     visualize_workflow()

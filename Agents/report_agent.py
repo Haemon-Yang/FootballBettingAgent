@@ -1,6 +1,6 @@
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
-from Prompt.deep_research_prompts import Rephrase_USER_QUERY, DEFAULT_REPORT_STRUCTURE, REPORT_PLAN_QUERY_GENERATOR_PROMPT, REPORT_PLAN_SECTION_GENERATOR_PROMPT
+from Prompt.deep_research_prompts import REPHRASE_USER_QUERY, DEFAULT_REPORT_STRUCTURE, REPORT_PLAN_QUERY_GENERATOR_PROMPT, REPORT_PLAN_SECTION_GENERATOR_PROMPT
 from GraphState.deep_research_state import ReportState, Queries, Sections, ReportStateInput
 from model import SearchQuery
 from .search_agent import run_search_queries, format_search_results
@@ -11,7 +11,7 @@ async def generate_report_plan(llm: ChatOpenAI, state: ReportState):
     # Interpret Topic
     #======================
     topic = state["topic"]
-    system_instructions = Rephrase_USER_QUERY
+    system_instructions = REPHRASE_USER_QUERY
     structured_llm = llm.with_structured_output(ReportStateInput)
 
     # Interpret topics queries

@@ -1,4 +1,4 @@
-Rephrase_USER_QUERY = """You're an expert in understanding user queries and rephrasing them in a way that is more specific and informative for ai agents to search.
+REPHRASE_USER_QUERY = """You're an expert in understanding user queries and rephrasing them in a way that is more specific and informative for ai agents to search.
 
 1. Reading a user's natural-language query.
 2. Identifying the key concepts, intent, and any implicit constraints.

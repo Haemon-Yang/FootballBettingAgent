@@ -1,25 +1,20 @@
 from GraphState.main_state import MainGraphState
-from Prompt import strategist_template
+from Prompt import strategist_template, interpret_query_prompt
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_community.vectorstores import Chroma
 from RAG import Data as RAG_data
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_openai import ChatOpenAI
 
 class Strategist():
-    def __init__(self, llm, vector_db_name: str):
-        vector_store = Chroma(
-            persist_directory=RAG_data.persist_directory,
-            embedding_function=HuggingFaceEmbeddings(model_name=RAG_data.embedding_model),
-            collection_name = vector_db_name
-        )
-        
+    def __init__(self, llm):
         prompt = ChatPromptTemplate.from_messages(strategist_template)
         parser = StrOutputParser()
-        chain = ({"teams_data": vector_store.as_retriever(k=RAG_data.retrieval_k), 
-                  "user_query": RunnablePassthrough()}
-            | RunnableLambda(debug_retrieval)
+        chain = (
+            {"teams_data": RunnablePassthrough(), "user_query": RunnablePassthrough()}
+            #| RunnableLambda(debug_retrieval)
             | prompt
             | llm
             | parser
