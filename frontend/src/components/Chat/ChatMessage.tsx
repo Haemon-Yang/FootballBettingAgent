@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { theme } from '../../styles/theme';
 import type { Message } from '../../features/chat/types';
+import ThinkingEffect from '../ThinkingEffect/ThinkingEffect';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(10px); }
@@ -86,6 +87,21 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       minute: '2-digit',
     });
   };
+
+  if (message.role === 'thinking') {
+    return (
+      <MessageContainer role="ai">
+        <RoleIndicator role="ai">
+          <RoleIcon>🤖</RoleIcon>
+          AI Assistant
+        </RoleIndicator>
+        <MessageBubble role="ai">
+          <ThinkingEffect />
+        </MessageBubble>
+        <Timestamp>{formatTime(message.timestamp)}</Timestamp>
+      </MessageContainer>
+    );
+  }
 
   return (
     <MessageContainer role={message.role}>

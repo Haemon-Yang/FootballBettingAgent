@@ -1,17 +1,17 @@
-from AgentFactory import AgentFactory
-from utils import RateLimiter
+from .AgentFactory import AgentFactory
+from .utils import RateLimiter
 from langgraph.constants import Send
 from langgraph.graph import END
-from GraphState.deep_research_state import SectionState, ReportState, ReportStateOutput
-from GraphState.main_state import MainGraphState
-from GraphState.strategist_state import StrategistState
-from Agents import generate_queries, write_section, write_final_sections, generate_report_plan, compile_final_report
-from Agents.search_agent import search_web
-from Agents.format_section_agent import format_completed_sections
-from Agents.write_section_agent import parallelize_section_writing, parallelize_final_section_writing
-from Agents.rewrite_query_forStrategist_agent import RewriteQueryForStrategist
-from RAG import Data as RAG_data
-from Agents.strategist_retriever_agent import Retrieve_docs_for_strategist
+from .GraphState.deep_research_state import SectionState, ReportState, ReportStateOutput
+from .GraphState.main_state import MainGraphState
+from .GraphState.strategist_state import StrategistState
+from .Agents import generate_queries, write_section, write_final_sections, generate_report_plan, compile_final_report
+from .Agents.search_agent import search_web
+from .Agents.format_section_agent import format_completed_sections
+from .Agents.write_section_agent import parallelize_section_writing, parallelize_final_section_writing
+from .Agents.rewrite_query_forStrategist_agent import RewriteQueryForStrategist
+from .RAG.Data import db_collection_name_premier_league
+from .Agents.strategist_retriever_agent import Retrieve_docs_for_strategist
 
 # 將底層Agent 實例化為一個node
 def transform_to_report_state(state: MainGraphState):
@@ -53,7 +53,7 @@ class Nodes():
         }
 
     def retrieve_doc_for_strategist(self, state: StrategistState):
-        result = Retrieve_docs_for_strategist(self.llm, RAG_data.db_collection_name_premier_league, state)
+        result = Retrieve_docs_for_strategist(self.llm, db_collection_name_premier_league, state)
 
         return {
             "user_query": result["user_query"],
@@ -90,8 +90,8 @@ class Nodes():
         """
         if state.adapter_route == "Strategist node needed":
             return Send("Strategist", transform_to_strategist_state(state))
-        elif state.adapter_route == "Deep Research node needed":
-            return Send("Deep Research", transform_to_report_state(state))
+        #elif state.adapter_route == "Deep Research node needed":
+        #    return Send("Deep Research", transform_to_report_state(state))
         else:
             return "Answer directly"
 

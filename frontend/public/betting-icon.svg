@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="15" fill="#0A192F" stroke="#64FFDA" stroke-width="2"/>
+  
+  <!-- Target symbol -->
+  <circle cx="16" cy="16" r="8" stroke="#64FFDA" stroke-width="2" fill="none"/>
+  <circle cx="16" cy="16" r="4" fill="#64FFDA"/>
+  
+  <!-- Betting arrow -->
+  <path d="M24 8L28 12L24 16" stroke="#64FFDA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M28 12H20" stroke="#64FFDA" stroke-width="2" stroke-linecap="round"/>
+</svg> 

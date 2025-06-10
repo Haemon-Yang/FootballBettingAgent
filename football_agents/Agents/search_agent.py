@@ -1,11 +1,11 @@
 from langchain_community.utilities.tavily_search import TavilySearchAPIWrapper
 import asyncio
 from typing import List, Dict, Union, Any
-from GraphState.deep_research_state import SearchQuery
+from ..GraphState.deep_research_state import SearchQuery
 import tiktoken
-from GraphState.deep_research_state import SectionState
+from ..GraphState.deep_research_state import SectionState
 from dotenv import load_dotenv
-from Data import NUMBER_OF_RESULTS
+from ..Data import NUMBER_OF_RESULTS
 
 load_dotenv()
 tavily_search = TavilySearchAPIWrapper()

@@ -1,8 +1,8 @@
-from Prompt.main_prompts import DetermineUserQuery_template
+from ..Prompt.main_prompts import DetermineUserQuery_template
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser, PydanticOutputParser
-from GraphState.main_state import MainGraphState
+from ..GraphState.main_state import MainGraphState
 
 class QueryAnalyzer():
     def __init__(self, llm) -> None:        

@@ -1,6 +1,6 @@
 export interface Message {
   id: string;
-  role: 'user' | 'ai';
+  role: 'user' | 'ai' | 'thinking';
   content: string;
   timestamp: number;
 }
@@ -13,6 +13,6 @@ export interface ChatState {
 
 export interface ChatContextType {
   state: ChatState;
-  sendMessage: (content: string) => Promise<void>;
+  sendMessage: (content: string, isDeepResearch?: boolean) => Promise<void>;
   clearMessages: () => void;
 } 

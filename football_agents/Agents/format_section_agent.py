@@ -1,4 +1,4 @@
-from GraphState.deep_research_state import SectionState, ReportState, Section
+from ..GraphState.deep_research_state import SectionState, ReportState, Section
 
 def format_sections(sections: list[Section]) -> str:
     """ Format a list of report sections into a single text string """

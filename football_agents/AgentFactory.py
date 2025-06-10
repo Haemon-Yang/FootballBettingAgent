@@ -1,5 +1,5 @@
-from Agents.query_analyzer import QueryAnalyzer
-from Agents.strategist import Strategist
+from .Agents.query_analyzer import QueryAnalyzer
+from .Agents.strategist import Strategist
 
 # Factory Agent
 class AgentFactory():

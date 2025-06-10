@@ -2,20 +2,20 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_community.vectorstores import Chroma
-from RAG import Data as RAG_data
+from ..RAG.Data import persist_directory, embedding_model, retrieval_k
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
-from GraphState.strategist_state import StrategistState
+from ..GraphState.strategist_state import StrategistState
 from langchain_core.output_parsers import PydanticOutputParser
-from Prompt import retrieve_template, interpret_query_prompt
+from ..Prompt import retrieve_template, interpret_query_prompt
 
 def Retrieve_docs_for_strategist(llm, vector_db_name: str, state: StrategistState):
     """Retrieve and process documents for the strategist agent."""
     
     # Initialize vector store
     vector_store = Chroma(
-        persist_directory=RAG_data.persist_directory,
-        embedding_function=HuggingFaceEmbeddings(model_name=RAG_data.embedding_model),
+        persist_directory=persist_directory,
+        embedding_function=HuggingFaceEmbeddings(model_name=embedding_model),
         collection_name=vector_db_name
     )
 
@@ -54,5 +54,5 @@ def Retrieve_docs_for_strategist(llm, vector_db_name: str, state: StrategistStat
 
 def retrieve_docs(vector_store, retrieval_query):
     """Helper function to retrieve documents from vector store."""
-    docs = vector_store.as_retriever(k=RAG_data.retrieval_k).invoke(retrieval_query)
+    docs = vector_store.as_retriever(k=retrieval_k).invoke(retrieval_query)
     return {"teams_data": docs}

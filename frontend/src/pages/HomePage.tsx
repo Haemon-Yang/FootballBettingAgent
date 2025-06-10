@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { theme } from '../styles/theme';
 import { Header } from '../components/Header/Header';
 import { Chat } from '../components/Chat/Chat';
 import { ChatProvider } from '../features/chat/ChatContext';
+import { config } from '../config';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -71,53 +72,17 @@ const WelcomeText = styled.p`
   line-height: 1.4;
 `;
 
-const FeatureGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: ${theme.spacing.md};
-  margin-top: ${theme.spacing.lg};
-`;
-
-const FeatureCard = styled.div`
-  background-color: var(--background-card);
-  padding: ${theme.spacing.lg};
-  border-radius: ${theme.borderRadius.lg};
-  box-shadow: ${theme.shadows.medium};
-  transition: all ${theme.transitions.default};
-  
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: ${theme.shadows.large};
-  }
-`;
-
-const FeatureIcon = styled.div`
-  font-size: 28px;
-  margin-bottom: ${theme.spacing.sm};
-  color: var(--text-accent);
-`;
-
-const FeatureTitle = styled.h3`
-  font-size: ${theme.typography.fontSize.large};
-  color: var(--text-primary);
-  margin-bottom: ${theme.spacing.xs};
-  font-weight: ${theme.typography.fontWeight.bold};
-`;
-
-const FeatureDescription = styled.p`
-  font-size: ${theme.typography.fontSize.medium};
-  color: var(--text-secondary);
-  line-height: 1.4;
-`;
-
 const ChatSection = styled.section`
   background-color: var(--background-light);
   border-radius: ${theme.borderRadius.lg};
   box-shadow: ${theme.shadows.medium};
-  height: 600px;
+  height: calc(100vh - 200px);
+  min-height: 600px;
   overflow: hidden;
   border: 1px solid var(--border-color);
   transition: box-shadow ${theme.transitions.default};
+  margin: 0 -${theme.spacing.xl};
+  width: calc(100% + ${theme.spacing.xl} * 2);
   
   &:hover {
     box-shadow: ${theme.shadows.large};
@@ -125,43 +90,27 @@ const ChatSection = styled.section`
 `;
 
 export const HomePage: React.FC = () => {
+  const [welcomeData, setWelcomeData] = useState<{ welcome_message: string; description: string } | null>(null);
+
+  useEffect(() => {
+    const fetchWelcomeMessage = async () => {
+      try {
+        const response = await fetch(`${config.API_URL}/`);
+        const data = await response.json();
+        setWelcomeData(data);
+      } catch (error) {
+        console.error('Error fetching welcome message:', error);
+      }
+    };
+
+    fetchWelcomeMessage();
+  }, []);
+
   return (
     <ChatProvider>
       <PageContainer>
         <MainContent>
           <Header />
-          <WelcomeSection>
-            <WelcomeTitle>
-              Welcome to Your <span>Smart Betting</span> Assistant
-            </WelcomeTitle>
-            <WelcomeText>
-              Get real-time insights, analysis, and predictions to make informed betting decisions.
-              Our AI-powered assistant is here to help you navigate the world of sports betting.
-            </WelcomeText>
-            <FeatureGrid>
-              <FeatureCard>
-                <FeatureIcon>🎯</FeatureIcon>
-                <FeatureTitle>Smart Analysis</FeatureTitle>
-                <FeatureDescription>
-                  Get detailed match analysis and predictions based on historical data and current form.
-                </FeatureDescription>
-              </FeatureCard>
-              <FeatureCard>
-                <FeatureIcon>📊</FeatureIcon>
-                <FeatureTitle>Real-time Stats</FeatureTitle>
-                <FeatureDescription>
-                  Access comprehensive statistics and trends to make data-driven decisions.
-                </FeatureDescription>
-              </FeatureCard>
-              <FeatureCard>
-                <FeatureIcon>🤖</FeatureIcon>
-                <FeatureTitle>AI-Powered</FeatureTitle>
-                <FeatureDescription>
-                  Leverage advanced AI technology for accurate predictions and insights.
-                </FeatureDescription>
-              </FeatureCard>
-            </FeatureGrid>
-          </WelcomeSection>
           <ChatSection>
             <Chat />
           </ChatSection>

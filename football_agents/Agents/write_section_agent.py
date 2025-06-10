@@ -1,7 +1,7 @@
-from GraphState.deep_research_state import SectionState, ReportState
+from ..GraphState.deep_research_state import SectionState, ReportState
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage
-from Prompt.deep_research_prompts import SECTION_WRITER_PROMPT, FINAL_SECTION_WRITER_PROMPT
+from ..Prompt.deep_research_prompts import SECTION_WRITER_PROMPT, FINAL_SECTION_WRITER_PROMPT
 from langgraph.constants import Send
 
 def write_section(llm: ChatOpenAI, state: SectionState):

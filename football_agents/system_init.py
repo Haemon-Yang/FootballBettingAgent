@@ -1,17 +1,17 @@
 from streamlit.runtime.state import SessionStateProxy
 import threading
 import datetime
-from Scrapper.PrimerLeague import PremierLeagueCrawler
-from Scrapper.scrapperData import Data as scrapperData
-import RAG.Data as RAG_Data
-from RAG.RAG_app import RAG_application
+from .Scrapper.PrimerLeague import PremierLeagueCrawler
+from .Scrapper.scrapperData import Data as scrapperData
+from .RAG.Data import persist_directory, embedding_model, db_collection_name_premier_league, retrieval_k
+from .RAG.RAG_app import RAG_application
 from langchain_openai import ChatOpenAI
 import os
 update_interval = 1 * 1 * 10 # 24 hours (hr * min * sec)
 
 # ToDo: 1. Logging System
 
-def system_init(llm: ChatOpenAI):
+def system_initialization(llm: ChatOpenAI):
     """
     Initialize the project variables.
     """   
@@ -90,7 +90,7 @@ def check_RAG_vector_db_exist() -> bool:
     """
     Check if the vector db exists.
     """
-    if not os.path.exists(RAG_Data.persist_directory):
+    if not os.path.exists(persist_directory):
         return False
     else:
         return True

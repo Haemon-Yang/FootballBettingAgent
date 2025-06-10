@@ -1,9 +1,9 @@
 from langgraph.graph import StateGraph, START, END
-from GraphState.main_state import MainGraphState
-from node import Nodes
-from GraphState.deep_research_state import ReportState, ReportStateInput, ReportStateOutput
-from GraphState.deep_research_state import SectionState, SectionOutputState
-from GraphState.strategist_state import StrategistState
+from .GraphState.main_state import MainGraphState
+from .node import Nodes
+from .GraphState.deep_research_state import ReportState, ReportStateInput, ReportStateOutput
+from .GraphState.deep_research_state import SectionState, SectionOutputState
+from .GraphState.strategist_state import StrategistState
 from langchain_openai import ChatOpenAI
 import os
 # Agent 中的最上層 用來連接所有Node
@@ -68,7 +68,7 @@ class Workflow():
         workflow = StateGraph(MainGraphState)
         workflow.add_node("Understand User Query", nodes.determine_userQuery)
         workflow.add_node("Strategist", strategist_agent)
-        workflow.add_node("Deep Research", deep_research_agent)
+        # workflow.add_node("Deep Research", deep_research_agent)
 
         workflow.add_edge(START, "Understand User Query")
         
@@ -78,21 +78,28 @@ class Workflow():
             nodes.route_based_to_strategist,
             {
                 "Strategist node needed": "Strategist",
-                "Deep Research node needed": "Deep Research", 
+                #"Deep Research node needed": "Deep Research", 
                 "Answer directly": END
             }
         )
         
         workflow.add_edge("Strategist", END)      
-        workflow.add_edge("Deep Research", END)
+        #workflow.add_edge("Deep Research", END)
+        main_agent = workflow.compile()
 
-        self.app = workflow.compile()
+        self.main_app = main_agent
+        self.deep_research_app = deep_research_agent
 
     @staticmethod
     # Function to fetch response from workflow
-    async def fetch_response(workflow, initial_state, result_container):
+    async def fetch_response(workflow, initial_state: dict, result_container: dict):
+        """
+        workflow: graph.Workflow()
+        initial_state: dict
+        result_container: dict
+        """
         # Execute the workflow and get the response
-        result = await workflow.app.ainvoke(initial_state)
+        result = await workflow.ainvoke(initial_state)
         result_container["response"] = result["response"]
         result_container["done"] = True
 
@@ -102,7 +109,7 @@ def visualize_workflow():
     workflow = Workflow(llm)
     
     # Get the graph before compilation
-    graph = workflow.app
+    graph = workflow.main_app
     
     graph_image = graph.get_graph().draw_mermaid_png()
     # Save the image

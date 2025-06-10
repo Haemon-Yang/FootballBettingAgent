@@ -3,6 +3,7 @@ import type { KeyboardEvent } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { theme } from '../../styles/theme';
 import { Button } from '../Button/Button';
+import { DeepResearchButton } from '../Button/DeepResearchButton';
 
 const slideUp = keyframes`
   from { transform: translateY(100%); }
@@ -11,7 +12,8 @@ const slideUp = keyframes`
 
 const InputContainer = styled.div`
   display: flex;
-  gap: ${theme.spacing.md};
+  flex-direction: column;
+  gap: ${theme.spacing.sm};
   padding: ${theme.spacing.lg};
   background-color: var(--background-light);
   border-top: 1px solid var(--border-color);
@@ -21,18 +23,28 @@ const InputContainer = styled.div`
   box-shadow: ${theme.shadows.medium};
 `;
 
+const ButtonRow = styled.div`
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 8px;
+`;
+
 const InputWrapper = styled.div`
   flex: 1;
   position: relative;
+  display: flex;
+  gap: ${theme.spacing.md};
+  align-items: center;
 `;
 
 const StyledInput = styled.input`
-  width: 100%;
+  flex: 1;
   background-color: var(--background-input);
   color: var(--text-primary);
   border: 2px solid var(--border-color);
   border-radius: ${theme.borderRadius.lg};
-  padding: ${theme.spacing.md} ${theme.spacing.lg};
+  padding: ${theme.spacing.md} ${theme.spacing.xl} ${theme.spacing.md} ${theme.spacing.lg};
   font-size: ${theme.typography.fontSize.medium};
   transition: all ${theme.transitions.default};
   
@@ -54,13 +66,14 @@ const StyledInput = styled.input`
 
 const InputHint = styled.div`
   position: absolute;
-  right: ${theme.spacing.md};
+  right: 110px; /* leave space for Send button */
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
   font-size: ${theme.typography.fontSize.small};
   pointer-events: none;
   opacity: 0.7;
+  background: transparent;
 `;
 
 const SendButton = styled(Button)`
@@ -81,14 +94,19 @@ const SendButton = styled(Button)`
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
-  isLoading: boolean;
+  onToggleDeepResearch?: (isActive: boolean) => void;
+  isDeepResearchActive?: boolean;
 }
 
-export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
+export const ChatInput: React.FC<ChatInputProps> = ({
+  onSendMessage,
+  onToggleDeepResearch,
+  isDeepResearchActive = false,
+}) => {
   const [message, setMessage] = useState('');
 
   const handleSend = () => {
-    if (message.trim() && !isLoading) {
+    if (message.trim()) {
       onSendMessage(message.trim());
       setMessage('');
     }
@@ -103,6 +121,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }
 
   return (
     <InputContainer>
+      <ButtonRow>
+        <DeepResearchButton
+          active={isDeepResearchActive}
+          onClick={() => onToggleDeepResearch && onToggleDeepResearch(!isDeepResearchActive)}
+        />
+      </ButtonRow>
       <InputWrapper>
         <StyledInput
           type="text"
@@ -110,18 +134,19 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }
           onChange={(e) => setMessage(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="Type your question..."
-          disabled={isLoading}
         />
-        {!message && !isLoading && (
-          <InputHint>Press Enter to send</InputHint>
+        {!message && (
+          <InputHint>
+            Press Enter to send
+          </InputHint>
         )}
+        <SendButton
+          onClick={handleSend}
+          disabled={!message.trim()}
+        >
+          Send
+        </SendButton>
       </InputWrapper>
-      <SendButton
-        onClick={handleSend}
-        disabled={!message.trim() || isLoading}
-      >
-        {isLoading ? 'Sending...' : 'Send'}
-      </SendButton>
     </InputContainer>
   );
 }; 
