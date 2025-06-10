@@ -8,7 +8,8 @@ test/
 # Vs code
 .vscode/
 
-# Python 
+# Python
+.pytest_cache/
 __pycache__/
 *.py[cod]
 *$py.class
@@ -41,3 +42,6 @@ ENV/
 .env
 # SpecStory explanation file
 .specstory/.what-is-this.md
+
+# Cursor
+.cursor/
