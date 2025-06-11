@@ -14,6 +14,14 @@ export const GlobalStyles = createGlobalStyle`
     --border-color: ${theme.colors.border};
   }
 
+  html, body, #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
   * {
     margin: 0;
     padding: 0;

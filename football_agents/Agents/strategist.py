@@ -3,10 +3,8 @@ from ..Prompt import strategist_template, interpret_query_prompt
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
-from langchain_community.vectorstores import Chroma
 from ..RAG.Data import db_collection_name_premier_league
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_openai import ChatOpenAI
+
 
 class Strategist():
     def __init__(self, llm):

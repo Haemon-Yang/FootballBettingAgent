@@ -6,6 +6,7 @@ from .GraphState.deep_research_state import SectionState, SectionOutputState
 from .GraphState.strategist_state import StrategistState
 from langchain_openai import ChatOpenAI
 import os
+from langgraph.graph.state import CompiledStateGraph
 # Agent 中的最上層 用來連接所有Node
 
 class Workflow():
@@ -92,11 +93,9 @@ class Workflow():
 
     @staticmethod
     # Function to fetch response from workflow
-    async def fetch_response(workflow, initial_state: dict, result_container: dict):
+    async def fetch_response(workflow: CompiledStateGraph, initial_state: dict, result_container: dict):
         """
-        workflow: graph.Workflow()
-        initial_state: dict
-        result_container: dict
+        Fetch response from workflow
         """
         # Execute the workflow and get the response
         result = await workflow.ainvoke(initial_state)

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { KeyboardEvent } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { theme } from '../../styles/theme';
 import { Button } from '../Button/Button';
 import { DeepResearchButton } from '../Button/DeepResearchButton';
@@ -8,6 +8,17 @@ import { DeepResearchButton } from '../Button/DeepResearchButton';
 const slideUp = keyframes`
   from { transform: translateY(100%); }
   to { transform: translateY(0); }
+`;
+
+const pulse = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
+
+const shimmer = keyframes`
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 `;
 
 const InputContainer = styled.div`
@@ -76,10 +87,34 @@ const InputHint = styled.div`
   background: transparent;
 `;
 
-const SendButton = styled(Button)`
+const SendButton = styled(Button)<{ isResponding: boolean }>`
   min-width: 100px;
   height: 48px;
   transition: all ${theme.transitions.default};
+  position: relative;
+  overflow: hidden;
+  
+  ${({ isResponding }) =>
+    isResponding &&
+    css`
+      animation: ${pulse} 1.5s infinite;
+      cursor: not-allowed;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        animation: ${shimmer} 1.5s infinite;
+      }
+    `}
   
   &:hover:not(:disabled) {
     transform: translateY(-2px);
@@ -96,26 +131,30 @@ interface ChatInputProps {
   onSendMessage: (message: string) => void;
   onToggleDeepResearch?: (isActive: boolean) => void;
   isDeepResearchActive?: boolean;
+  isAiResponding?: boolean;
 }
 
 export const ChatInput: React.FC<ChatInputProps> = ({
   onSendMessage,
   onToggleDeepResearch,
   isDeepResearchActive = false,
+  isAiResponding = false,
 }) => {
   const [message, setMessage] = useState('');
 
   const handleSend = () => {
-    if (message.trim()) {
+    if (message.trim() && !isAiResponding) {
       onSendMessage(message.trim());
       setMessage('');
     }
   };
 
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey && !isAiResponding) {
       e.preventDefault();
       handleSend();
+    } else if (e.key === 'Enter' && isAiResponding) {
+      e.preventDefault(); // Block sending with Enter
     }
   };
 
@@ -135,14 +174,15 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           onKeyPress={handleKeyPress}
           placeholder="Type your question..."
         />
-        {!message && (
+        {!message && !isAiResponding && (
           <InputHint>
             Press Enter to send
           </InputHint>
         )}
         <SendButton
           onClick={handleSend}
-          disabled={!message.trim()}
+          disabled={!message.trim() || isAiResponding}
+          isResponding={isAiResponding}
         >
           Send
         </SendButton>

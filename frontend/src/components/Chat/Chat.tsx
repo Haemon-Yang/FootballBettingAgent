@@ -5,6 +5,7 @@ import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { useChat } from '../../features/chat/ChatContext';
 import { config } from '../../config';
+import { FaArrowDown } from 'react-icons/fa';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(10px); }
@@ -195,6 +196,30 @@ const FeatureDescription = styled.p`
   word-break: break-word;
 `;
 
+const JumpToLatestButton = styled.button`
+  position: fixed;
+  right: 36px;
+  bottom: 100px;
+  z-index: 100;
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 4px 16px rgba(0,180,216,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  &:hover {
+    background: var(--secondary-color);
+    box-shadow: 0 8px 32px 0 rgba(0,180,216,0.28);
+  }
+`;
+
 export const Chat: React.FC = () => {
   const { state, sendMessage } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -202,6 +227,12 @@ export const Chat: React.FC = () => {
   const [isTyping, setIsTyping] = useState(true);
   const [isDeepResearchActive, setIsDeepResearchActive] = useState(false);
   const [typedLines, setTypedLines] = useState<string[]>([]);
+  const [isAiResponding, setIsAiResponding] = useState(false);
+  const [typingMessageId, setTypingMessageId] = useState<string | null>(null);
+  const [typedContent, setTypedContent] = useState<string>('');
+  const [typingDone, setTypingDone] = useState(true);
+  const [userScrolledUp, setUserScrolledUp] = useState(false);
+  const [autoScrollLocked, setAutoScrollLocked] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -260,12 +291,80 @@ export const Chat: React.FC = () => {
     return () => { isMounted = false; };
   }, []);
 
+  // Helper to check if user is at the bottom
+  const isAtBottom = () => {
+    const el = messagesEndRef.current?.parentElement;
+    if (!el) return true;
+    return el.scrollHeight - el.scrollTop - el.clientHeight < 10;
+  };
+
+  // Listen for user scroll
   useEffect(() => {
-    scrollToBottom();
+    const el = messagesEndRef.current?.parentElement;
+    if (!el) return;
+    const onScroll = () => {
+      const atBottom = isAtBottom();
+      setUserScrolledUp((prev) => prev || !atBottom); // Once true, stays true until next message
+      if (!atBottom && !autoScrollLocked) setAutoScrollLocked(true);
+    };
+    el.addEventListener('scroll', onScroll);
+    return () => el.removeEventListener('scroll', onScroll);
+  }, [autoScrollLocked]);
+
+  // Completely disable auto-scroll: remove all scrollIntoView and scrollToBottom calls
+  // useEffect(() => {
+  //   scrollToBottom();
+  // }, [state.messages]);
+
+  // Smart auto-scroll: only scroll if user is at bottom when new message/typing
+  useEffect(() => {
+    if (state.messages.length === 0) return;
+    const el = messagesEndRef.current?.parentElement;
+    if (!el) return;
+    // If user is at bottom, scroll to bottom
+    if (el.scrollHeight - el.scrollTop - el.clientHeight < 10) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [state.messages, typedContent]);
+
+  // Improved typewriter effect: type by word, fast, smart auto-scroll
+  useEffect(() => {
+    if (state.messages.length === 0) return;
+    const lastMsg = state.messages[state.messages.length - 1];
+    if (lastMsg.role === 'ai') {
+      setTypingMessageId(lastMsg.id);
+      setTypedContent('');
+      setTypingDone(false);
+      setAutoScrollLocked(false); // Reset lock for new message
+      setUserScrolledUp(false); // Reset for new message
+      const words = lastMsg.content.split(/(\s+)/); // keep spaces
+      let i = 0;
+      function typeWord() {
+        if (i <= words.length) {
+          setTypedContent(words.slice(0, i).join(''));
+          i++;
+          if (i <= words.length) {
+            setTimeout(typeWord, 30);
+          } else {
+            setTypingDone(true);
+          }
+        }
+      }
+      typeWord();
+    } else {
+      setTypingMessageId(null);
+      setTypedContent('');
+      setTypingDone(true);
+      setAutoScrollLocked(false);
+      setUserScrolledUp(false);
+    }
+    // eslint-disable-next-line
   }, [state.messages]);
 
-  const handleSendMessage = (message: string) => {
-    sendMessage(message, isDeepResearchActive);
+  const handleSendMessage = async (message: string) => {
+    setIsAiResponding(true);
+    await sendMessage(message, isDeepResearchActive);
+    setIsAiResponding(false);
   };
 
   return (
@@ -306,16 +405,29 @@ export const Chat: React.FC = () => {
             )}
           </EmptyState>
         ) : (
-          state.messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
-          ))
+          state.messages.map((message, idx) => {
+            if (message.role === 'ai' && message.id === typingMessageId && !typingDone) {
+              return (
+                <ChatMessage key={message.id} message={{ ...message, content: typedContent + '▍' }} />
+              );
+            }
+            return <ChatMessage key={message.id} message={message} />;
+          })
         )}
         <div ref={messagesEndRef} />
       </MessagesContainer>
+      {userScrolledUp && (
+        <JumpToLatestButton onClick={() => {
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }} title="Jump to latest">
+          <FaArrowDown />
+        </JumpToLatestButton>
+      )}
       <ChatInput 
         onSendMessage={handleSendMessage} 
         isDeepResearchActive={isDeepResearchActive}
         onToggleDeepResearch={setIsDeepResearchActive}
+        isAiResponding={isAiResponding || !typingDone}
       />
     </ChatContainer>
   );

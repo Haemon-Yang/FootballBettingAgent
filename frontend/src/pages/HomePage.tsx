@@ -12,20 +12,25 @@ const fadeIn = keyframes`
 `;
 
 const PageContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
   min-height: 100vh;
   background-color: var(--background-main);
   background-image: 
     radial-gradient(circle at 100% 0%, rgba(100, 255, 218, 0.08) 0%, transparent 50%),
     radial-gradient(circle at 0% 100%, rgba(0, 180, 216, 0.08) 0%, transparent 50%);
+  display: flex;
+  flex-direction: column;
 `;
 
 const MainContent = styled.main`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: ${theme.spacing.lg} ${theme.spacing.xl};
+  flex: 1 1 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.lg};
+  padding: ${theme.spacing.lg} ${theme.spacing.lg};
 `;
 
 const WelcomeSection = styled.section`
@@ -76,13 +81,15 @@ const ChatSection = styled.section`
   background-color: var(--background-light);
   border-radius: ${theme.borderRadius.lg};
   box-shadow: ${theme.shadows.medium};
-  height: calc(100vh - 200px);
-  min-height: 600px;
+  flex: 1 1 0;
+  min-height: 0;
   overflow: hidden;
   border: 1px solid var(--border-color);
   transition: box-shadow ${theme.transitions.default};
-  margin: 0 -${theme.spacing.xl};
-  width: calc(100% + ${theme.spacing.xl} * 2);
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   
   &:hover {
     box-shadow: ${theme.shadows.large};

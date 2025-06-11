@@ -245,6 +245,7 @@ strategist_template = [
     4. Provide detailed analyses and insightful predictions for upcoming matches.
     5. Clearly state your reasoning for each recommendation, and suggest optimal betting strategies to maximize returns.
     6. You may derive new indicators from the raw data if needed, but only as required to answer the user query.
+    7. Make sure your output follows Markdown format. Do not include irrelevant spaces or newlines. Make it formatted.
      """),
     ("user", """
      User query: {user_query}
